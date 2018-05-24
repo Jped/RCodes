@@ -63,20 +63,23 @@ sum(morph2CD$race=="H")
 sum(morph2CD$race=="O")
 
 #step 3a
-maleAggregate = aggregate(picture_num~id_num,morph2CMale,max)
+getLength <- function(x){
+  return(length(x)-1); 
+}
+maleAggregate = aggregate(picture_num~id_num,morph2CMale,getLength)
 sum(maleAggregate$picture_num ==1)
 sum(maleAggregate$picture_num ==2)
 sum(maleAggregate$picture_num ==3)
 sum(maleAggregate$picture_num ==4)
 sum(maleAggregate$picture_num ==0)
-femaleAggregate= aggregate(picture_num~id_num,morph2CFemale,max)
+femaleAggregate= aggregate(picture_num~id_num,morph2CFemale,getLength)
 sum(femaleAggregate$picture_num ==1)
 sum(femaleAggregate$picture_num ==2)
 sum(femaleAggregate$picture_num ==3)
 sum(femaleAggregate$picture_num ==4)
 sum(femaleAggregate$picture_num ==0)
 
-morph2CDA = aggregate(picture_num~id_num,morph2C,max)
+morph2CDA = aggregate(picture_num~id_num,morph2C,getLength)
 sum(morph2CDA$picture_num ==1)
 sum(morph2CDA$picture_num ==2)
 sum(morph2CDA$picture_num ==3)
