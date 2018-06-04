@@ -7,26 +7,37 @@ library(dplyr)
 #Step1
 fn <- file.choose();
 morph2NC         =read.csv(file=fn,header=T);
+
 morph2NCMale     =subset(morph2NC,subset=morph2NC$gender=="M") 
 morph2NCFemale   =subset(morph2NC,subset=morph2NC$gender=="F")
-# morph2NCDist     =subset(morph2NC, subset=morph2NC$picture_num==0) 
-morph2NCDID      =distinct(morph2NC, id_num, .keep_all=T)
-setdiff(morph2NCDID$id_num, morph2NCDist$id_num)
+#morph2NCDist     =subset(morph2NC, subset=morph2NC$picture_num==0) 
+#morph2NCDID      =distinct(morph2NC, id_num, .keep_all=T)
+# setdiff(morph2NCDID$id_num, morph2NCDist$id_num)
 
-distinctMales = distinct(morph2NCMale, id_num,.keep_all=T)
-sum(distinctMales$race=="B")
-sum(distinctMales$race=="W")
-sum(distinctMales$race=="A")
-sum(distinctMales$race=="H")
-sum(distinctMales$race=="O")
+# distinctMales = distinct(morph2NCMale, id_num,.keep_all=T)
+# sum(distinctMales$race=="B")
+# sum(distinctMales$race=="W")
+# sum(distinctMales$race=="A")
+# sum(distinctMales$race=="H")
+# sum(distinctMales$race=="O")
+dim((distinct(subset(morph2NCMale, subset=morph2NCMale$race=="B"), id_num)))[1]
+dim((distinct(subset(morph2NCMale, subset=morph2NCMale$race=="W"), id_num)))[1]
+dim((distinct(subset(morph2NCMale, subset=morph2NCMale$race=="A"), id_num)))[1]
+dim((distinct(subset(morph2NCMale, subset=morph2NCMale$race=="H"), id_num)))[1]
+dim((distinct(subset(morph2NCMale, subset=morph2NCMale$race=="O"), id_num)))[1]
 
-distinctFemales = distinct(morph2NCFemale, id_num, .keep_all=T)
-sum(distinctFemales$race=="B")
-sum(distinctFemales$race=="W")
-sum(distinctFemales$race=="A")
-sum(distinctFemales$race=="H")
-sum(distinctFemales$race=="O")
+# distinctFemales = distinct(morph2NCFemale, id_num, .keep_all=T)
+# sum(distinctFemales$race=="B")
+# sum(distinctFemales$race=="W")
+# sum(distinctFemales$race=="A")
+# sum(distinctFemales$race=="H")
+# sum(distinctFemales$race=="O")
 
+dim((distinct(subset(morph2NCFemale, subset=morph2NCFemale$race=="B"), id_num)))[1]
+dim((distinct(subset(morph2NCFemale, subset=morph2NCFemale$race=="W"), id_num)))[1]
+dim((distinct(subset(morph2NCFemale, subset=morph2NCFemale$race=="A"), id_num)))[1]
+dim((distinct(subset(morph2NCFemale, subset=morph2NCFemale$race=="H"), id_num)))[1]
+dim((distinct(subset(morph2NCFemale, subset=morph2NCFemale$race=="O"), id_num)))[1]
 
 sum(morph2NCDID$race=="B")
 sum(morph2NCDID$race=="W")

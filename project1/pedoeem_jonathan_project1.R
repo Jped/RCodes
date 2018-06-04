@@ -21,9 +21,6 @@ grabAge <- function(x){
 }
 dim(morph2)
 morph2$gender <- lapply(morph2[,1],grabLetter);
-
-
-
 morph2$age    <- lapply(morph2[,1],grabAge);
 
 sum(is.na(morph2$gender))
@@ -35,7 +32,7 @@ morph2= morph2[,-1]
 # pairs(as.matrix(morph2[,1:2]))
 ## Here we make the pie chart of the Sex
 pieGender = c(sum(morph2$gender==0), sum(morph2$gender==1));
-piePercent= round(pieGender/sum(pieGender),1)
+piePercent= round(pieGender/sum(pieGender),2)
 pie(pieGender, labels=piePercent, main="Breakup of Gender", col= rainbow(length(pieGender)));
 legend("topright", c("Female","Male"), cex = 0.8,
        fill = rainbow(length(pieGender)))

@@ -3,13 +3,14 @@
 ## UNCW REU 2018
 
 #Load in data
-
+library(MASS)
 fn <- file.choose();
-library("stringr")
 morph2=read.csv(file=fn,header=F); 
 grabLetter <- function(x){
   gender<- str_extract(x, "[M,F]")
-  if(gender == "M"){
+  if (is.na(gender)){
+ 
+  }else if(gender == "M"){
     return(1);
   }
   else if (gender == "F"){
@@ -21,37 +22,38 @@ grabAge <- function(x){
   end <- str_locate(x, ".JPG")[1];
   return(as.numeric(substr(x,start+1, end-1)));
 }
+dim(morph2)
 morph2$gender <- lapply(morph2[,1],grabLetter);
 morph2$age    <- lapply(morph2[,1],grabAge);
 
+
 morph2= morph2[,-1]
-morph2$gender = factor(morph2$gender)
-morph2$age    = as.integer(morph2$age)
 ##part 1: Regression
 ##Linear Regression
-lm.fit = lm(as.integer(morph2$age)~.,data=morph2[,1:20])
+lm.fit = lm(as.integer(morph2$age)~.,data=morph2[,1:810])
 summary(lm.fit)
 names(lm.fit)
 coef(lm.fit)
 confint(lm.fit)
 
-#most significant is V3
-lm.fit = lm(as.integer(morph2$age)~V3,data=morph2)
+#most significant is V3 (edit it is actually v2)
+lm.fit = lm(as.integer(morph2$age)~V2,data=morph2)
 summary(lm.fit)
 names(lm.fit)
 coef(lm.fit)
 confint(lm.fit)
-plot(as.integer(morph2$age)~morph2$V3, main="Using V3 to Predict Age", ylab="Age", xlab="V3 Val")
+plot(as.integer(morph2$age)~morph2$V2, main="Using V2 to Predict Age", ylab="Age", xlab="V2 Val")
 abline(lm.fit,col="red")
 
-##Quadratic Regression
-lm.quadfit = lm(as.integer(morph2$age)~poly(V3,2),data=morph2)
+##Quadratic Regression 
+
+lm.quadfit = lm(as.integer(morph2$age)~poly(V2,2),data=morph2)
 summary(lm.quadfit)
 names(lm.quadfit)
 coef(lm.quadfit)
 confint(lm.quadfit)
 xx = seq(0,255,length=100)
-lines(xx, predict(lm.quadfit,data.frame(V3=xx)),col="blue")
+lines(xx, predict(lm.quadfit,data.frame(V2=xx)),col="blue")
 ##Polynomial Regression (degree 3)
 lm.cubefit = lm(as.integer(morph2$age)~poly(V3,3),data=morph2)
 summary(lm.cubefit)
@@ -59,9 +61,12 @@ names(lm.cubefit)
 coef(lm.cubefit)
 confint(lm.cubefit)
 lines(xx, predict(lm.cubefit,data.frame(V3=xx)),col="green")
+legend("topright", c("Linear","Quadratic", "Cubic"),
+       fill = c("red","blue","green"))
 
 ##Part 2: Classification
 #split up into test and train
+morph2$gender = factor(as.numeric(morph2$gender))
 train = morph2[1:800,]
 test  = morph2[801:1000,]
 #also take the time for each of the different methods.
@@ -69,7 +74,7 @@ test  = morph2[801:1000,]
 
 ##Logistic Regression
 #Train on all of the data.
-logistic.fit = glm(morph2$gender~., data=morph2[,1:175], family=binomial)
+logistic.fit = glm(morph2$gender~., data=morph2[,1:125], family=binomial)
 summary(logistic.fit)
 logisitc.prob = predict(logistic.fit, type="response")
 logistic.pred   = rep(0,1000)
@@ -82,16 +87,20 @@ mean(logistic.pred==morph2$gender)
 807/(36+807)
 #specificity 
 117/(117+40)
+
 #Now do the same with the 80/20 train test split.
-logistic.fit2 = glm(train$gender~., data=train[,1:125], family=binomial)
+start.time <-Sys.time()
+logistic.fit2 = glm(train$gender~., data=train[1:200], family=binomial)
+end.time <- Sys.time()
+time.taken <- end.time-start.time
 summary(logistic.fit2)
 logisitc.prob2 = predict(logistic.fit2,test, type="response")
-logistic.pred2   = rep(0,200)
+rlogistic.pred2   = rep(0,200)
 logistic.pred2[logisitc.prob2>0.5]=1
 #confusion matrix
 table(logistic.pred2,test$gender)
 #the overall prediction accuracy
-mean(logistic.pred==test$gender)
+mean(logistic.pred2==test$gender)
 #sensitivity
 142/(142+29)
 #specificity 
